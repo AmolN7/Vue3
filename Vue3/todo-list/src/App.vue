@@ -1,40 +1,18 @@
 <template>
   <div class="col4 layout">
-  <ul>
-    <li @click="clickTask(1)" ><strong>Todo List</strong></li>
-    <li @click="clickTask(2)" ><strong>Task List</strong></li>
-  </ul>
+   <ul>
+    <li><router-link to="/todo-list"><strong>Todo List</strong></router-link></li> 
+    <li><router-link to="/task-list"><strong>Task List</strong></router-link></li>
+   </ul>
   </div>
   <div class="col8 layout">
-    <TodoList v-show="isClicked==1" />
-    <TaskList v-show="isClicked==2" />
-    <TodoForm />
-  </div>
-
+    <router-view />
+  </div>  
 </template>
 
 <script>
-import TodoList from './components/TodoList.vue';
-import TaskList from './components/TaskList.vue';
-import TodoForm from './components/TodoForm.vue';
-
-export default {
-  components: {
-    TodoList,
-    TaskList,
-    TodoForm
-  },
-  data() {
-    return {
-      isClicked: 0,
-    }
-  },
-  methods: {
-    clickTask(tskId) {
-      this.isClicked = tskId;
-      //alert(this.isClicked);
-    },
-  },
+ 
+export default {     
   
 };
 </script>
@@ -55,5 +33,25 @@ export default {
 }
 li{
   cursor:pointer;
+}
+ 
+input[type="text"] {
+    width: 90%;
+    height:25px;
+}
+textarea {
+    width: 90%;
+    height:100px;
+}
+.btn-holder {
+    margin-top:100px;
+    justify-content: flex-end;
+    display: flex;
+}
+.frm{
+    padding: 10px;
+}
+.frm>span {
+   color:red;
 }
 </style>
