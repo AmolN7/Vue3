@@ -1,50 +1,105 @@
 <template>
   <div>
-    <input v-model="newTask" @keyup.enter="addTask" placeholder="Add a new task" />
-    <ul>
-      <li v-for="task in tasks" :key="task.id">
-        <span>{{ task.text }}</span>
-        <button @click="removeTask(task.id)">X</button>
-      </li>
-    </ul>
+    <!-- <input v-model="newTodo" @keyup.enter="addTodo" placeholder="Add a new todo" /> -->
+    <table >
+    <tr>
+        <th>No.</th>
+        <th>Todo Name</th>
+        <th>short Description</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    <tr v-for="todo,index in todos" :key="todo.id">
+        <td>{{index+1}}</td>
+        <td>
+            <input type="checkbox" v-model="todo.completed" />
+            <span :class="{ completed: todo.completed }">{{ todo.todo_name }}</span>
+        </td>
+        <td class="left">
+            <span>{{ todo.short_description }}</span>
+        </td>
+        <td> <button :class="[{ status_green: todo.completed}, { status_red: !todo.completed}]" ></button></td>
+        <td><button @click="editTodo(todo.id)">Edit</button> | <button @click="removeTodo(todo.id)">X</button></td>
+    </tr>
+    <tr>
+        <td colspan="5" v-if="todos.length<=0"><br/>No Record </td>
+    </tr>
+    </table>
+
+    <div class="btn-holder">
+      <router-link to="/todo-form"><button type="button"  >Add Todo</button></router-link>
+        
+    </div>
   </div>
+   
 </template>
 
 <script>
 import { ref } from 'vue';
-
-export default {
+import todoData from '../../data/todo.json'
+ 
+export default {   
   setup() {
-    const newTask = ref('');
-    const tasks = ref([
-      { id: 1, text: 'Task 1' },
-      { id: 2, text: 'Task 2' },
-    ]);
+    const newTodo = ref('');
+    const todos = ref(todoData);    
 
-    const addTask = () => {
-      if (newTask.value.trim() !== '') {
-        const newId = tasks.value.length + 1;
-        tasks.value.push({
-          id: newId,
-          text: newTask.value,
-        });
-        newTask.value = '';
+    const removeTodo = (id) => {
+      const index = todos.value.findIndex((todo) => todo.id === id);
+      if (index !== -1) {
+        todos.value.splice(index, 1);
       }
     };
-
-    const removeTask = (id) => {
-      const index = tasks.value.findIndex((task) => task.id === id);
+    const editTodo = (id) => {
+      const index = todos.value.findIndex((todo) => todo.id === id);
       if (index !== -1) {
-        tasks.value.splice(index, 1);
+        //load edit components
       }
     };
 
     return {
-      newTask,
-      tasks,
-      addTask,
-      removeTask,
+      newTodo,
+      todos,       
+      removeTodo,
+      editTodo,
     };
   },
 };
 </script>
+
+<style>
+.completed {
+  text-decoration: line-through;
+}
+button {
+    margin:2px;
+}
+table{
+    border: solid 1px black;
+    width: 100%;
+    
+}
+tr {
+  border: solid 1px; 
+  
+}
+.center {
+  text-align:center;
+}
+.left {
+  text-align:left;
+}
+.status_green {
+    background-color:green;
+    padding:10px;
+
+}
+.status_red {
+    background-color:red;
+    padding:10px;     
+}
+.btn-holder {
+    margin-top:100px;
+    justify-content: flex-end;
+    display: flex;
+}
+</style>

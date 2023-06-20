@@ -4,22 +4,22 @@
     <table>
     <tr>
         <th>No.</th>
-        <th>Todo Name</th>
-        <th>short Description</th>
+        <th class="left pl-20">Todo Name</th>
+        <th class="left pl-20">short Description</th>
         <th>Status</th>
         <th>Action</th>
     </tr>
     <tr v-for="todo,index in todos" :key="todo.id">
         <td>{{index+1}}</td>
-        <td>
+        <td class="left pl-20">
             <input type="checkbox" v-model="todo.completed" />
             <span :class="{ completed: todo.completed }">{{ todo.todo_name }}</span>
         </td>
-        <td>
+        <td class="left pl-20">
             <span>{{ todo.short_description }}</span>
         </td>
         <td> <button :class="[{ status_green: todo.completed}, { status_red: !todo.completed}]" ></button></td>
-        <td><button @click="editTodo(todo.id)">Edit</button> | <button @click="removeTodo(todo.id)">X</button></td>
+        <td><router-link :to="/todo-form-edit/+todo.id"><button>Edit</button></router-link> | <button @click="removeTodo(todo.id)">X</button></td>
     </tr>
     <tr>
         <td colspan="5" v-if="todos.length<=0"><br/>No Record </td>
@@ -27,31 +27,21 @@
     </table>
 
     <div class="btn-holder">
-        <button type="button">Add Todo</button>
+      <router-link to="/todo-form"><button type="button"  >Add Todo</button></router-link>
+        
     </div>
   </div>
-  
+   
 </template>
 
 <script>
 import { ref } from 'vue';
 import todoData from '../../data/todo.json'
-export default {
+ 
+export default {   
   setup() {
     const newTodo = ref('');
-    const todos = ref(todoData);
-
-    const addTodo = () => {
-      if (newTodo.value.trim() !== '') {
-        const newId = todos.value.length + 1;
-        todos.value.push({
-          id: newId,
-          todo_name: newTodo.value,
-          completed: false,
-        });
-        newTodo.value = '';
-      }
-    };
+    const todos = ref(todoData);    
 
     const removeTodo = (id) => {
       const index = todos.value.findIndex((todo) => todo.id === id);
@@ -68,8 +58,7 @@ export default {
 
     return {
       newTodo,
-      todos,
-      addTodo,
+      todos,       
       removeTodo,
       editTodo,
     };
@@ -105,5 +94,14 @@ tr {
     margin-top:100px;
     justify-content: flex-end;
     display: flex;
+}
+.center {
+  text-align:center;
+}
+.left {
+  text-align:left;
+}
+.pl-20 {
+  padding-left: 20px;
 }
 </style>
