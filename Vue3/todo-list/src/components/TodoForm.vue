@@ -92,8 +92,6 @@ export default {
   mounted() {
     //console.log(this.$route.params.id);
     this.showdata(this.$route.params.id);
-  },
-   
+  },   
 };
-
 </script>

@@ -1,9 +1,4 @@
-[
-    { "id": 1, "todo_name": "Learn Vue","short_description":"disc1", "completed": false },
-    { "id": 2, "todo_name": "Build an app","short_description":"disc2", "completed": true },
-    { "id": 3, "todo_name": "Build an app","short_description":"disc2", "completed": true },
-    { "id": 4, "todo_name": "Build an app","short_description":"disc2", "completed": true },
-    { "id": 5, "todo_name": "Build an app","short_description":"disc2", "completed": true },
-    { "id": 6, "todo_name": "Build an app","short_description":"disc2", "completed": true },
-    { "id": 7, "todo_name": "Build an app","short_description":"disc2", "completed": true }
+[ 
+    { "id": 1, "todo_name": "Learn Vue","short_description":"disc1","description":"description", "completed": false },
+    { "id": 2, "todo_name": "Build an app","short_description":"disc2","description":"description2", "completed": true }
 ] 

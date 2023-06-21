@@ -1,33 +1,36 @@
 <template>
   <div>
-    <!-- <input v-model="newTodo" @keyup.enter="addTodo" placeholder="Add a new todo" /> -->
-    <table >
+    <table>
     <tr>
         <th>No.</th>
-        <th>Todo Name</th>
-        <th>short Description</th>
+        <th class="left pl-20">Task Name</th>
+        <th class="left pl-20">Description</th>
+        <th>Created Date</th>
+        <th>Due Date</th>
         <th>Status</th>
         <th>Action</th>
     </tr>
-    <tr v-for="todo,index in todos" :key="todo.id">
+    <tr v-for="task,index in tasks" :key="task.id">
         <td>{{index+1}}</td>
-        <td>
-            <input type="checkbox" v-model="todo.completed" />
-            <span :class="{ completed: todo.completed }">{{ todo.todo_name }}</span>
+        <td class="left pl-20">            
+            <span>{{ task.task_name }}</span>
         </td>
-        <td class="left">
-            <span>{{ todo.short_description }}</span>
+        <td class="left pl-20">
+            <span>{{ task.description }}</span>
         </td>
-        <td> <button :class="[{ status_green: todo.completed}, { status_red: !todo.completed}]" ></button></td>
-        <td><button @click="editTodo(todo.id)">Edit</button> | <button @click="removeTodo(todo.id)">X</button></td>
+         <td><span>{{formatDateTime(task.cdate)  }}</span></td>
+         <td><span>{{formatDateTime(task.ddate)  }}</span></td>
+           
+        <td><button :class="[{ task_green: (calDays(task.ddate)>10)}, { task_red: (calDays(task.ddate)<=0)},{ task_yellow: (calDays(task.ddate)>0 && calDays(task.ddate)<=10)}]" ></button></td>
+        <td><router-link :to="/task-form-edit/+task.id"><button>Edit</button></router-link> | <button @click="removeTask(task.id)">X</button></td>
     </tr>
     <tr>
-        <td colspan="5" v-if="todos.length<=0"><br/>No Record </td>
+        <td colspan="7" v-if="tasks.length<=0"><br/>No Record </td>
     </tr>
     </table>
 
     <div class="btn-holder">
-      <router-link to="/todo-form"><button type="button"  >Add Todo</button></router-link>
+      <router-link to="/task-form"><button type="button"  >Add task</button></router-link>
         
     </div>
   </div>
@@ -36,70 +39,44 @@
 
 <script>
 import { ref } from 'vue';
-import todoData from '../../data/todo.json'
+import taskData from '../../data/task.json'
  
 export default {   
   setup() {
-    const newTodo = ref('');
-    const todos = ref(todoData);    
+    const newTask = ref('');
+    const tasks = ref(taskData);    
 
-    const removeTodo = (id) => {
-      const index = todos.value.findIndex((todo) => todo.id === id);
+    const removeTask = (id) => {
+      const index = tasks.value.findIndex((task) => task.id === id);
       if (index !== -1) {
-        todos.value.splice(index, 1);
+        tasks.value.splice(index, 1);
       }
     };
-    const editTodo = (id) => {
-      const index = todos.value.findIndex((todo) => todo.id === id);
-      if (index !== -1) {
-        //load edit components
-      }
-    };
+    
 
     return {
-      newTodo,
-      todos,       
-      removeTodo,
-      editTodo,
+      newTask,
+      tasks,       
+      removeTask,
+      
     };
   },
+  methods:{
+    calDays(dDate){
+      let currDate = new Date();
+      dDate = new Date(dDate);
+      let diffDays = parseInt((dDate - currDate) / (1000 * 60 * 60 * 24), 10); 
+      return diffDays;
+    },
+    formatDateTime(dateTm){      
+      let d = new Date(dateTm);
+      let curr_date = d.getDate();
+      let curr_month = d.getMonth();
+      let curr_year = d.getFullYear();
+      let curr_hours = d.getHours();
+      let curr_min = d.getMinutes();
+      return curr_date + "-" + curr_month + "-" + curr_year+" "+curr_hours+":"+curr_min;
+    }
+  }
 };
 </script>
-
-<style>
-.completed {
-  text-decoration: line-through;
-}
-button {
-    margin:2px;
-}
-table{
-    border: solid 1px black;
-    width: 100%;
-    
-}
-tr {
-  border: solid 1px; 
-  
-}
-.center {
-  text-align:center;
-}
-.left {
-  text-align:left;
-}
-.status_green {
-    background-color:green;
-    padding:10px;
-
-}
-.status_red {
-    background-color:red;
-    padding:10px;     
-}
-.btn-holder {
-    margin-top:100px;
-    justify-content: flex-end;
-    display: flex;
-}
-</style>
