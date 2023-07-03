@@ -76,12 +76,14 @@
       background-color:#04AA6D;
       padding:2px;
       border: none;
+      border-radius:30px;
   
   }
   .status_red {
       background-color:red;
       padding:2px;
       border: none;     
+      border-radius:30px;
   }
   
   .center {
@@ -97,17 +99,20 @@
       background-color:#04AA6D;
       padding:10px;
       border: none;
+      border-radius:30px;
   
   }
   .task_red {
       background-color:red;
       padding:10px;   
       border: none;  
+      border-radius:30px;
   }
   .task_yellow {
       background-color:yellow;
       padding:10px;   
       border: none;  
+      border-radius:30px;
   }
   
 ul {
