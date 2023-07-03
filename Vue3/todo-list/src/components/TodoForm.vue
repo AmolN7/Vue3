@@ -18,10 +18,13 @@
 <script>
 import { ref } from 'vue';
 import todoData from '../../data/todo.json'
-import router from "@/router";
+import { onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 export default {
  
   setup() {
+    const router = useRouter();
+    const route = useRoute();
     const newTodoName = ref('');
     const newTodoSdesc = ref('');
     const newTodoDesc = ref('');
@@ -29,18 +32,13 @@ export default {
     const todos = ref(todoData);     
     
     const showdata = (id=null) => { 
-        for (var i = 0; i < todos.value.length; i++) {
-            if (todos.value[i].id == id) {            
-                newTodoName.value = todos.value[i].todo_name;
-                newTodoSdesc.value = todos.value[i].short_description;
-                newTodoDesc.value = todos.value[i].description;
-                newTodoStat.value = todos.value[i].completed;
-                break;             
-            }  
-        }                
+        let tdIndex = todos.value.findIndex(todo=>todo.id==id);           
+        newTodoName.value = todos.value[tdIndex].todo_name;
+        newTodoSdesc.value = todos.value[tdIndex].short_description;
+        newTodoDesc.value = todos.value[tdIndex].description;
+        newTodoStat.value = todos.value[tdIndex].completed;       
     };
     const addTodo = () => { 
-       //console.log(newTodoName,newTodoSdesc,newTodoDesc,newTodoStat)
        if (newTodoName.value.trim() !== '' 
            && newTodoSdesc.value.trim() !== ''
            && newTodoDesc.value.trim() !== ''           
@@ -63,21 +61,20 @@ export default {
             && newTodoSdesc.value.trim() !== ''
             && newTodoDesc.value.trim() !== ''           
             && id) {
-                for (var i = 0; i < todos.value.length; i++) {
-                    if (todos.value[i].id == id) {            
-                        todos.value[i].todo_name= newTodoName.value;
-                        todos.value[i].short_description= newTodoSdesc.value;
-                        todos.value[i].description= newTodoDesc.value;
-                        todos.value[i].completed=newTodoStat.value;
-                        break;             
-                    }  
-                }
-                newTodoName.value = newTodoSdesc.value = newTodoDesc.value ='';
-                newTodoStat.value = false;
+              let tdIndex = todos.value.findIndex(todo=>todo.id==id);                               
+              todos.value[tdIndex].todo_name= newTodoName.value;
+              todos.value[tdIndex].short_description= newTodoSdesc.value;
+              todos.value[tdIndex].description= newTodoDesc.value;
+              todos.value[tdIndex].completed=newTodoStat.value;
+              newTodoName.value = newTodoSdesc.value = newTodoDesc.value ='';
+              newTodoStat.value = false;
             }        
         router.push('/todo-list');
     };
-    
+    onMounted(() => {      
+      //console.log(route.params.id );
+      showdata(route.params.id);
+    });
     return {
       newTodoName,
       newTodoSdesc,
@@ -88,10 +85,6 @@ export default {
       editTodo,
       showdata,
     };
-  }, 
-  mounted() {
-    //console.log(this.$route.params.id);
-    this.showdata(this.$route.params.id);
-  },   
+  },       
 };
 </script>

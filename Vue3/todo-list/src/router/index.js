@@ -3,14 +3,14 @@ import TodoList from "@/components/TodoList.vue";
 import TodoForm from "@/components/TodoForm.vue";
 import TaskList from "@/components/TaskList.vue";
 import TaskForm from "@/components/TaskForm.vue";
-import HomePage from "@/components/HomePage.vue";
+
 
 
 const routes = [
     {
       path: "/",
       name: "HomePage",
-      component: HomePage,
+      component: TodoList,
     },
     {
       path: "/todo-list",

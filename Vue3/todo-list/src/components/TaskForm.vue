@@ -20,10 +20,13 @@
 <script>
 import { ref } from 'vue';
 import taskData from '../../data/task.json'
-import router from "@/router";
+import { onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 export default {
  
   setup() {
+    const router = useRouter();
+    const route = useRoute();
     const newTaskName = ref('');    
     const newTaskDesc = ref('');
     const newTaskCdate = ref('');
@@ -40,15 +43,11 @@ export default {
     };
     const showdata = (id=null) => {           
         newTaskCdate.value = tdate();
-        for (var i = 0; i < tasks.value.length; i++) {
-            if (tasks.value[i].id == id) {            
-                newTaskName.value = tasks.value[i].task_name;                 
-                newTaskDesc.value = tasks.value[i].description;
-                newTaskCdate.value = tasks.value[i].cdate;
-                newTaskDdate.value = tasks.value[i].ddate;                 
-                break;             
-            }  
-        }                
+        let tsIndex = tasks.value.findIndex(task=>task.id==id);             
+        newTaskName.value = tasks.value[tsIndex].task_name;                 
+        newTaskDesc.value = tasks.value[tsIndex].description;
+        newTaskCdate.value = tasks.value[tsIndex].cdate;
+        newTaskDdate.value = tasks.value[tsIndex].ddate;                         
     };
     const addTask = () => {          
        if (newTaskName.value.trim() !== ''           
@@ -75,22 +74,21 @@ export default {
             && newTaskDesc.value.trim() !== ''           
             && newTaskCdate.value.trim() !== ''           
             && newTaskDdate.value.trim() !== ''           
-            && id) {
-                for (var i = 0; i < tasks.value.length; i++) {
-                    if (tasks.value[i].id == id) {            
-                        tasks.value[i].task_name= newTaskName.value;                       
-                        tasks.value[i].description= newTaskDesc.value;
-                        tasks.value[i].cdate= newTaskCdate.value;
-                        tasks.value[i].ddate= newTaskDdate.value;                         
-                        break;             
-                    }  
-                }
-                newTaskName.value =  newTaskDesc.value = newTaskCdate.value = newTaskDdate.value ='';
-            }        
+            && id) {   
+              let tsIndex = tasks.value.findIndex(task=>task.id==id);               
+              tasks.value[tsIndex].task_name= newTaskName.value;                       
+              tasks.value[tsIndex].description= newTaskDesc.value;
+              tasks.value[tsIndex].cdate= newTaskCdate.value;
+              tasks.value[tsIndex].ddate= newTaskDdate.value;            
+              newTaskName.value =  newTaskDesc.value = newTaskCdate.value = newTaskDdate.value ='';             
+              }        
         router.push('/task-list');
     };
     
-    
+    onMounted(() => {      
+      //console.log(route.params.id );
+      showdata(route.params.id);
+    });
     return {
       newTaskName,
       newTaskCdate,
@@ -102,10 +100,6 @@ export default {
       showdata,
       tdate,
     };
-  }, 
-  mounted() {
-    this.showdata(this.$route.params.id);
-  }, 
-    
+  },     
 };
 </script>
