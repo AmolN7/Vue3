@@ -49,7 +49,10 @@
     text-decoration: line-through;
   }
   button {
-      margin:2px;     
+    margin:2px;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
   }
   .box {
     border-bottom: 1px solid #026c45;
@@ -64,17 +67,21 @@
   tr {
     border: solid 1px;  
   }
-  tr th{
-    border-bottom: 1px solid #026c45;
+  thead {
+    background-color: #04AA6D;
+    color: #FFFFFF;
+    height: 35px;
   }
   .status_green {
-      background-color:green;
-      padding:1px;
+      background-color:#04AA6D;
+      padding:2px;
+      border: none;
   
   }
   .status_red {
       background-color:red;
-      padding:1px;     
+      padding:2px;
+      border: none;     
   }
   
   .center {
@@ -87,17 +94,20 @@
     padding-left: 20px;
   }
   .task_green {
-      background-color:green;
+      background-color:#04AA6D;
       padding:10px;
+      border: none;
   
   }
   .task_red {
       background-color:red;
-      padding:10px;     
+      padding:10px;   
+      border: none;  
   }
   .task_yellow {
       background-color:yellow;
-      padding:10px;     
+      padding:10px;   
+      border: none;  
   }
   
 ul {
@@ -147,3 +157,15 @@ ul {
   ::-webkit-scrollbar-thumb:hover {
     background: #046f48; 
   }
+  .icon {
+    font-size: 25px;
+    vertical-align: center;
+    cursor: pointer;
+  }
+  .green {
+    color: #04AA6D;
+  }
+  .red {
+    color: #FF0000;
+  }
+  

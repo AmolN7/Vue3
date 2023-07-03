@@ -87,7 +87,8 @@ export default {
     
     onMounted(() => {      
       //console.log(route.params.id );
-      showdata(route.params.id);
+      let id = (route.params.id)?route.params.id:null;
+      showdata(id);
     });
     return {
       newTaskName,

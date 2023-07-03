@@ -32,6 +32,7 @@ export default {
     const todos = ref(todoData);     
     
     const showdata = (id=null) => { 
+        //if(id==null) return;
         let tdIndex = todos.value.findIndex(todo=>todo.id==id);           
         newTodoName.value = todos.value[tdIndex].todo_name;
         newTodoSdesc.value = todos.value[tdIndex].short_description;
@@ -73,7 +74,8 @@ export default {
     };
     onMounted(() => {      
       //console.log(route.params.id );
-      showdata(route.params.id);
+      let id = (route.params.id)?route.params.id:null;
+      showdata(id);
     });
     return {
       newTodoName,
