@@ -46,6 +46,7 @@ export default {
            && newTodoDesc.value.trim() !== ''           
            ) {
         const newId = todos.value.length + 1;
+        //console.log(newId);
         ApiService.postApi("/todo",
                               {  id: newId,
                                 todo_name: newTodoName.value,

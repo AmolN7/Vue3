@@ -58,6 +58,7 @@ export default {
            && newTaskDdate.value.trim() !== ''          
            ) {
         const newId = tasks.value.length + 1;
+        console.log(newId);
         ApiService.postApi("/task",
           {
             id: newId,
@@ -91,8 +92,11 @@ export default {
         
     };
     
-    onBeforeMount(() => {  
-      //console.log(tdate());  
+    onBeforeMount(async() => {  
+      if(tasks.value.length===0) { 
+        const res = await ApiService.getApi("/task")
+        tasks.value = await res.json(); 
+      } 
       newTaskCdate.value = tdate();  
       let id = (route.params.id != undefined)?route.params.id:null;
       if(id==null || id== undefined) return;       
