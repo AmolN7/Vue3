@@ -17,16 +17,18 @@ export default {
             { "id": 2, "menu_name": "Task List","router_path":"/task-list","short_description":"Task List", "is_active":"", "is_visible": true }
     ]);
      
-    const set_active = (id) =>{
-        if (previous_active_id === id) return //no need to go further
+    const set_active = (mId) =>{
+        if (previous_active_id === mId) return //no need to go further
             menuBar.value.find(menu => menu.id === previous_active_id).is_active = ''; //remove the active class from old active li 
-            menuBar.value.find(menu => menu.id === id).is_active = true; //set active class to new li
-            previous_active_id = id //store the new active li id
+            menuBar.value.find(menu => menu.id === mId).is_active = true; //set active class to new li
+            previous_active_id = mId //store the new active li id
 
             //console.log(menuBar.value.find(menu => menu.router_path === '/task-list').id);
     };
     const set_active_byuri = (uri) =>{
-        set_active(menuBar.value.find(menu => menu.router_path === uri).id);
+        let actId = menuBar.value.find(menu => menu.router_path === uri);
+        if(actId!= undefined)
+        set_active(actId.id);
     };
     return {
         menuBar,

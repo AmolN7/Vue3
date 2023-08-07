@@ -44,8 +44,9 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import taskData from '../../data/task.json'
+import {onBeforeMount,onUpdated, ref } from 'vue';
+//import taskData from '../../data/task.json'
+import ApiService from '../services/ApiService';
 import { BookEditOutline, TrashCanOutline } from 'mdue';
 export default {   
   components: { 
@@ -54,12 +55,20 @@ export default {
   }, 
   setup() {
     const newTask = ref('');
-    const tasks = ref(taskData);    
-
+    const tasks = ref([]);    
+    onBeforeMount(async() => {         
+        if(tasks.value.length===0) {          
+          const res = await ApiService.getApi("/task")
+          tasks.value = await res.json();
+        }
+    })
+    onUpdated(async() => {
+      const resN = await ApiService.getApi("/task")
+      tasks.value = await resN.json();
+    })
     const removeTask = (id) => {
-      const index = tasks.value.findIndex((task) => task.id === id);
-      if (index !== -1) {
-        tasks.value.splice(index, 1);
+      if(id) {
+        ApiService.deleteApi(`/task/${id}`); 
       }
     };
     const calDays = (dDate)=>{
@@ -82,6 +91,8 @@ export default {
       tasks,       
       removeTask,
       calDays,
+      onUpdated,
+      onBeforeMount,
       formatDateTime
     };
   },

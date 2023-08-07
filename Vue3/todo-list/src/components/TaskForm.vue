@@ -19,9 +19,9 @@
 
 <script>
 import { ref } from 'vue';
-import taskData from '../../data/task.json'
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import ApiService from '../services/ApiService';
 export default {
  
   setup() {
@@ -31,7 +31,8 @@ export default {
     const newTaskDesc = ref('');
     const newTaskCdate = ref('');
     const newTaskDdate = ref('');
-    const tasks = ref(taskData);     
+    const tasks = ref([]);      
+    
     const tdate = () => { 
       let d = new Date();      
       let curr_date = String(d.getDate()).padStart(2, '0');
@@ -41,13 +42,14 @@ export default {
       let curr_min = String(d.getMinutes()).padStart(2, '0');
       return curr_year+"-"+curr_month+"-"+curr_date+"T"+curr_hours+":"+curr_min;
     };
-    const showdata = (id=null) => {           
-        newTaskCdate.value = tdate();
-        let tsIndex = tasks.value.findIndex(task=>task.id==id);             
-        newTaskName.value = tasks.value[tsIndex].task_name;                 
-        newTaskDesc.value = tasks.value[tsIndex].description;
-        newTaskCdate.value = tasks.value[tsIndex].cdate;
-        newTaskDdate.value = tasks.value[tsIndex].ddate;                         
+    const showdata = async(id=null) => {       
+      if(id==null || id== undefined) return;        
+        const resN = await ApiService.getApi(`/task/${id}`)
+        tasks.value = await resN.json();                  
+        newTaskName.value = tasks.value.task_name;                 
+        newTaskDesc.value = tasks.value.description;
+        newTaskCdate.value = tasks.value.cdate; 
+        newTaskDdate.value = tasks.value.ddate;                         
     };
     const addTask = () => {          
        if (newTaskName.value.trim() !== ''           
@@ -56,39 +58,46 @@ export default {
            && newTaskDdate.value.trim() !== ''          
            ) {
         const newId = tasks.value.length + 1;
-        tasks.value.push({
-          id: newId,
-          task_name: newTaskName.value,           
-          description: newTaskDesc.value,
-          cdate: newTaskCdate.value,
-          ddate: newTaskDdate.value,
-           
-        });
+        ApiService.postApi("/task",
+          {
+            id: newId,
+            task_name: newTaskName.value,           
+            description: newTaskDesc.value,
+            cdate: newTaskCdate.value,
+            ddate: newTaskDdate.value,           
+          });
         newTaskName.value =  newTaskDesc.value = newTaskCdate.value = newTaskDdate.value ='';
         
       }
       router.push('/task-list');
-    };     
-    const editTask = (id) => { 
+    };   
+      
+    const editTask = (id) => {         
+         
         if (newTaskName.value.trim() !== ''            
             && newTaskDesc.value.trim() !== ''           
             && newTaskCdate.value.trim() !== ''           
             && newTaskDdate.value.trim() !== ''           
             && id) {   
-              let tsIndex = tasks.value.findIndex(task=>task.id==id);               
-              tasks.value[tsIndex].task_name= newTaskName.value;                       
-              tasks.value[tsIndex].description= newTaskDesc.value;
-              tasks.value[tsIndex].cdate= newTaskCdate.value;
-              tasks.value[tsIndex].ddate= newTaskDdate.value;            
-              newTaskName.value =  newTaskDesc.value = newTaskCdate.value = newTaskDdate.value ='';             
-              }        
+          ApiService.putApi(`/task/${id}`,
+          {       
+            task_name: newTaskName.value,           
+            description: newTaskDesc.value,
+            cdate: newTaskCdate.value,
+            ddate: newTaskDdate.value,           
+          }); 
+        }    
         router.push('/task-list');
+        
     };
     
-    onMounted(() => {      
-      //console.log(route.params.id );
-      let id = (route.params.id)?route.params.id:null;
-      showdata(id);
+    onBeforeMount(() => {  
+      //console.log(tdate());  
+      newTaskCdate.value = tdate();  
+      let id = (route.params.id != undefined)?route.params.id:null;
+      if(id==null || id== undefined) return;       
+       showdata(id);
+        
     });
     return {
       newTaskName,
@@ -96,10 +105,11 @@ export default {
       newTaskDesc,
       newTaskDdate,
       tasks,
+      onBeforeMount,
       addTask,
       editTask,
       showdata,
-      tdate,
+      tdate
     };
   },     
 };

@@ -17,27 +17,28 @@
 
 <script>
 import { ref } from 'vue';
-import todoData from '../../data/todo.json'
-import { onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { onBeforeMount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import ApiService from '../services/ApiService';
 export default {
  
-  setup() {
+   setup() {
     const router = useRouter();
     const route = useRoute();
     const newTodoName = ref('');
     const newTodoSdesc = ref('');
     const newTodoDesc = ref('');
     const newTodoStat = ref('');
-    const todos = ref(todoData);     
-    
-    const showdata = (id=null) => { 
-        //if(id==null) return;
-        let tdIndex = todos.value.findIndex(todo=>todo.id==id);           
-        newTodoName.value = todos.value[tdIndex].todo_name;
-        newTodoSdesc.value = todos.value[tdIndex].short_description;
-        newTodoDesc.value = todos.value[tdIndex].description;
-        newTodoStat.value = todos.value[tdIndex].completed;       
+    const todos = ref([]); 
+
+    const showdata = async(id=null) => {        
+        if(id==null) return;
+        const resN = await ApiService.getApi(`/todo/${id}`)
+        todos.value = await resN.json();
+        newTodoName.value = todos.value.todo_name;
+        newTodoSdesc.value = todos.value.short_description;
+        newTodoDesc.value = todos.value.description;
+        newTodoStat.value = todos.value.completed;       
     };
     const addTodo = () => { 
        if (newTodoName.value.trim() !== '' 
@@ -45,13 +46,14 @@ export default {
            && newTodoDesc.value.trim() !== ''           
            ) {
         const newId = todos.value.length + 1;
-        todos.value.push({
-          id: newId,
-          todo_name: newTodoName.value,
-          short_description: newTodoSdesc.value,
-          description: newTodoDesc.value,
-          completed: newTodoStat.value,
-        });
+        ApiService.postApi("/todo",
+                              {  id: newId,
+                                todo_name: newTodoName.value,
+                                short_description: newTodoSdesc.value,
+                                description: newTodoDesc.value,
+                                completed: newTodoStat.value,
+                              });
+        
         newTodoName.value = newTodoSdesc.value = newTodoDesc.value ='';
         newTodoStat.value = false;
       }
@@ -62,21 +64,28 @@ export default {
             && newTodoSdesc.value.trim() !== ''
             && newTodoDesc.value.trim() !== ''           
             && id) {
-              let tdIndex = todos.value.findIndex(todo=>todo.id==id);                               
-              todos.value[tdIndex].todo_name= newTodoName.value;
-              todos.value[tdIndex].short_description= newTodoSdesc.value;
-              todos.value[tdIndex].description= newTodoDesc.value;
-              todos.value[tdIndex].completed=newTodoStat.value;
+              ApiService.putApi(`/todo/${id}`,
+                              {   
+                                todo_name: newTodoName.value,
+                                short_description: newTodoSdesc.value,
+                                description: newTodoDesc.value,
+                                completed: newTodoStat.value,
+                              });
               newTodoName.value = newTodoSdesc.value = newTodoDesc.value ='';
               newTodoStat.value = false;
             }        
         router.push('/todo-list');
     };
-    onMounted(() => {      
+    onBeforeMount(async() => {  
+    if(todos.value.length===0) {
+      const res = await ApiService.getApi("/todo")
+      todos.value = await res.json(); 
+    }
       //console.log(route.params.id );
       let id = (route.params.id)?route.params.id:null;
       showdata(id);
     });
+      
     return {
       newTodoName,
       newTodoSdesc,
@@ -86,6 +95,7 @@ export default {
       addTodo,
       editTodo,
       showdata,
+      onBeforeMount
     };
   },       
 };

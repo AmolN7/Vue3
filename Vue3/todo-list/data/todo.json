@@ -1,4 +1,0 @@
-[ 
-    { "id": 1, "todo_name": "Learn Vue","short_description":"disc1","description":"description", "completed": false },
-    { "id": 2, "todo_name": "Build an app","short_description":"disc2","description":"description2", "completed": true }
-] 
