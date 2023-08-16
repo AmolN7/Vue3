@@ -48,15 +48,16 @@
       //const router = useRouter();
       const newTodo = ref('');  
       let todos = ref([]);
+
       onBeforeMount(async() => {         
           if(todos.value.length===0) {          
             const res = await ApiService.getApi("/todo")
-            todos.value = await res.json();
+            todos.value = await res.json();             
           }
       }) 
-      onUpdated(async() => {
-        const resN  = await ApiService.getApi("/todo")
-        todos.value = await resN.json();
+      onUpdated(async() => {        
+          const resN  = await ApiService.getApi("/todo")
+          todos.value = await resN.json();        
       })
       const patchTodo = (id,val) => {
         ApiService.patchApi(`/todo/${id}`,{completed: val})

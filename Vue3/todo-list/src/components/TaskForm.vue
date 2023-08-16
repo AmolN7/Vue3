@@ -8,18 +8,15 @@
       <p><input :disabled="true"  v-model="newTaskCdate" type="datetime-local" placeholder="Task Name" /> </p> 
       Due Date<span>*</span>
       <p><input v-model="newTaskDdate" type="datetime-local" placeholder="Task Name" /> </p> 
-      
       <div class="btn-holder">
         <button v-if="!this.$route.params.id" type="button" @click="addTask">Add Task</button>
         <button v-if="this.$route.params.id" type="button" @click="editTask(this.$route.params.id);">Update Task</button>
       </div>
-    </div> 
-      
+    </div>       
 </template>
 
 <script>
-import { ref } from 'vue';
-import { onBeforeMount } from 'vue'
+import { ref,onBeforeMount } from 'vue'; 
 import { useRouter, useRoute } from 'vue-router'
 import ApiService from '../services/ApiService';
 export default {
@@ -56,9 +53,13 @@ export default {
            && newTaskDesc.value.trim() !== ''
            && newTaskCdate.value.trim() !== ''  
            && newTaskDdate.value.trim() !== ''          
-           ) {
-        const newId = tasks.value.length + 1;
-        console.log(newId);
+           ) {        
+        let newId = 1;
+        if(tasks.value.length>0) {
+          const getMaxID = (cod) => tasks.value.reduce((a,c)=>((+a[cod])<(+c[cod]))?c:a);
+          newId = getMaxID('id').id +1; 
+        }
+        //console.log(newId);
         ApiService.postApi("/task",
           {
             id: newId,
@@ -88,8 +89,7 @@ export default {
             ddate: newTaskDdate.value,           
           }); 
         }    
-        router.push('/task-list');
-        
+        router.push('/task-list');        
     };
     
     onBeforeMount(async() => {  

@@ -45,8 +45,12 @@ export default {
            && newTodoSdesc.value.trim() !== ''
            && newTodoDesc.value.trim() !== ''           
            ) {
-        const newId = todos.value.length + 1;
-        //console.log(newId);
+        let newId = 1;
+        if(todos.value.length>0) {
+          const getMaxID = (cod) => todos.value.reduce((a,c)=>((+a[cod])<(+c[cod]))?c:a);
+          newId = getMaxID('id').id +1; 
+        }
+        newTodoStat.value = (!newTodoStat.value)?false:true;
         ApiService.postApi("/todo",
                               {  id: newId,
                                 todo_name: newTodoName.value,
@@ -65,6 +69,7 @@ export default {
             && newTodoSdesc.value.trim() !== ''
             && newTodoDesc.value.trim() !== ''           
             && id) {
+              newTodoStat.value = (!newTodoStat.value)?false:true;
               ApiService.putApi(`/todo/${id}`,
                               {   
                                 todo_name: newTodoName.value,

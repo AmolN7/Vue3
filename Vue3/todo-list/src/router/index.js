@@ -3,9 +3,6 @@ import TodoList from "@/components/TodoList.vue";
 import TodoForm from "@/components/TodoForm.vue";
 import TaskList from "@/components/TaskList.vue";
 import TaskForm from "@/components/TaskForm.vue";
-
-
-
 const routes = [
     {
       path: "/",

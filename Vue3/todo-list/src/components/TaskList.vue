@@ -45,7 +45,6 @@
 
 <script>
 import {onBeforeMount,onUpdated, ref } from 'vue';
-//import taskData from '../../data/task.json'
 import ApiService from '../services/ApiService';
 import { BookEditOutline, TrashCanOutline } from 'mdue';
 export default {   
