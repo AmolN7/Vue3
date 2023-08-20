@@ -1,16 +1,17 @@
 import { mount } from '@vue/test-utils';
-import TodoForm from '@/components/TodoForm.vue'; // Adjust the import path
+import { createApp } from 'vue'; // Import createApp for Vue 3
+import TodoForm from '@/components/TodoForm.vue';
 
 describe('TodoForm.vue', () => {
   it('adds a new todo when Add Todo button is clicked', async () => {
-    const wrapper = mount(TodoForm);
+    const app = createApp(TodoForm); // Create a Vue app instance
+    const wrapper = mount(app);
+
     // Set input values
-    await wrapper.setData({
-      newTodoName: 'Test Todo',
-      newTodoSdesc: 'Short description',
-      newTodoDesc: 'Description',
-      newTodoStat: false,
-    });
+    app.config.globalProperties.newTodoName = 'Test Todo';
+    app.config.globalProperties.newTodoSdesc = 'Short description';
+    app.config.globalProperties.newTodoDesc = 'Description';
+    app.config.globalProperties.newTodoStat = false;
 
     // Simulate button click
     await wrapper.find('button').trigger('click');
@@ -19,25 +20,27 @@ describe('TodoForm.vue', () => {
   });
 
   it('edits a todo when Update Todo button is clicked', async () => {
-    const wrapper = mount(TodoForm);
+    const app = createApp(TodoForm); // Create a Vue app instance
+    const wrapper = mount(app);
+
     // Mock route params
     const mockRoute = {
       params: {
         id: 'mock_id', // Provide a valid ID here
       },
     };
-    await wrapper.setData({
-      newTodoName: 'Updated Todo',
-      newTodoSdesc: 'Updated Short description',
-      newTodoDesc: 'Updated Description',
-      newTodoStat: true,
-    });
+
+    // Set input values
+    app.config.globalProperties.newTodoName = 'Updated Todo';
+    app.config.globalProperties.newTodoSdesc = 'Updated Short description';
+    app.config.globalProperties.newTodoDesc = 'Updated Description';
+    app.config.globalProperties.newTodoStat = true;
 
     // Set up router and route
-    wrapper.vm.$router = {
+    app.config.globalProperties.$router = {
       push: jest.fn(),
     };
-    wrapper.vm.$route = mockRoute;
+    app.config.globalProperties.$route = mockRoute;
 
     // Simulate button click
     await wrapper.find('button').trigger('click');
