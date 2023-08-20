@@ -1,0 +1,49 @@
+import { mount } from '@vue/test-utils';
+import TodoForm from '@/components/TodoForm.vue'; // Adjust the import path
+
+describe('TodoForm.vue', () => {
+  it('adds a new todo when Add Todo button is clicked', async () => {
+    const wrapper = mount(TodoForm);
+    // Set input values
+    await wrapper.setData({
+      newTodoName: 'Test Todo',
+      newTodoSdesc: 'Short description',
+      newTodoDesc: 'Description',
+      newTodoStat: false,
+    });
+
+    // Simulate button click
+    await wrapper.find('button').trigger('click');
+
+    // Add your assertions to check if the todo was added correctly
+  });
+
+  it('edits a todo when Update Todo button is clicked', async () => {
+    const wrapper = mount(TodoForm);
+    // Mock route params
+    const mockRoute = {
+      params: {
+        id: 'mock_id', // Provide a valid ID here
+      },
+    };
+    await wrapper.setData({
+      newTodoName: 'Updated Todo',
+      newTodoSdesc: 'Updated Short description',
+      newTodoDesc: 'Updated Description',
+      newTodoStat: true,
+    });
+
+    // Set up router and route
+    wrapper.vm.$router = {
+      push: jest.fn(),
+    };
+    wrapper.vm.$route = mockRoute;
+
+    // Simulate button click
+    await wrapper.find('button').trigger('click');
+
+    // Add your assertions to check if the todo was updated correctly
+  });
+
+  // Add more test cases as needed
+});
