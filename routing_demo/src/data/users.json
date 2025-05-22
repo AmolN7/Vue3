@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "role": "admin",
+        "age": 30,
+        "address": {
+            "street": "123 Main St",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001"
+        },
+        "registered": "2023-01-16"
+    },
+    {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "Smith@gmail.com",
+        "role": "user",
+        "age": 25,
+        "address": {
+            "street": "456 Elm St",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90001"
+        },
+        "registered": "2023-11-15"
+    },
+    {
+        "id": 3,
+        "name": "Alice Johnson",
+        "email": "@gmail.com",
+        "role": "user",
+        "age": 28,
+        "address": {
+            "street": "789 Oak St",
+            "city": "Chicago",
+            "state": "IL",
+            "zip": "60601"
+        },
+        "registered": "2023-01-15"
+    }
+]
