@@ -28,7 +28,9 @@ export default {
     },
     methods:{
         addTodo(){
-            
+            if(this.newTodo.trim() === ''){
+                return; // Prevent adding empty todos
+            }
             this.todos.push({id:this.todoCount+1,text:this.newTodo,isCompleted:false});
         },
         removeTodo(id){

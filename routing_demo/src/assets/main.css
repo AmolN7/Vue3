@@ -1,7 +1,7 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
@@ -13,6 +13,22 @@ a,
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
   padding: 3px;
+}
+
+button {
+  background: hsla(160, 100%, 37%, 1);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+input {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  padding: 0.3rem;
+  border-radius: 4px;
 }
 
 @media (hover: hover) {
@@ -28,7 +44,7 @@ a,
   }
 
   #app {
-    display: grid;
+    /* display: grid; */
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }

@@ -1,7 +1,7 @@
 <template>
     <div>
     <h1>Table Sorting</h1>
-    {{ users }}
+    <!-- {{ users }} -->
   <v-table
     :data="users"
   >

@@ -4,10 +4,16 @@
      <h1>Composition API</h1>
      <br/><hr/>
     <br/><br/>
+    <SearchBar />
+    <br/><hr/>
+    <br/><br/>
     <CounterComp />
     <br/><hr/>
     <br/><br/>
     <TodosComp />
+    <br/><hr/>
+    <br/><br/>
+    <toggleSwitch />
     <br/><hr/>
     <br/><br/>
 
@@ -18,4 +24,6 @@
 <script setup>
 import CounterComp from '@/components/CounterComp.vue'
 import TodosComp from '@/components/TodosComp.vue'
+import toggleSwitch from '@/components/ToggleSwitch.vue'
+import SearchBar from '@/components/SearchBar.vue'
 </script>
